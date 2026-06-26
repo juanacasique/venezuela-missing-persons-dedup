@@ -33,6 +33,9 @@ por edad (incluyendo "sin dato"), ubicaciones y calidad geográfica de los datos
 
 <https://htmlpreview.github.io/?https://github.com/alcastaro/venezuela-missing-persons-dedup/blob/main/docs/infografia.html>
 
+Se **regenera** con `python3 infografia_gen.py` tras actualizar los datos: toma las cifras de
+`data/processed/`, incrusta el logo y sella la fecha/hora de actualización en hora de Venezuela (UTC−4).
+
 ## Instalación
 
 ```bash
@@ -108,7 +111,9 @@ Ver `docs/plan_inferir_atributos.md`.
 | `nombres_genero.csv` | Gazetteer curado de nombres → sexo (lista genérica, no contiene datos de personas) |
 | `docs/plan_deduplicacion.md` | Método y decisiones de la deduplicación |
 | `docs/plan_inferir_atributos.md` | Método y decisiones de la inferencia sexo/edad |
+| `infografia_gen.py` | Genera `docs/infografia.html` desde los datos procesados |
 | `docs/infografia.html` | Infografía autocontenida de la base de-duplicada (agregados) |
+| `assets/olds_logo.png` | Logo de OLDS (se incrusta en la infografía) |
 | `requirements.txt` | Dependencias Python |
 
 ## Privacidad
