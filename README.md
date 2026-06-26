@@ -25,6 +25,14 @@ sistema de **webscraping** que los recolecta se publican aquí, a propósito:
 
 Para usar el código, aporta tu propio CSV de reportes con el formato de abajo.
 
+## Infografía
+
+`docs/infografia.html` resume la base de-duplicada: estado de búsqueda, sexo, **pirámide poblacional**
+por edad (incluyendo "sin dato"), ubicaciones y calidad geográfica de los datos. Es autocontenida
+(sin dependencias externas). GitHub no renderiza HTML; ábrela localmente o vía:
+
+<https://htmlpreview.github.io/?https://github.com/alcastaro/venezuela-missing-persons-dedup/blob/main/docs/infografia.html>
+
 ## Instalación
 
 ```bash
@@ -100,6 +108,7 @@ Ver `docs/plan_inferir_atributos.md`.
 | `nombres_genero.csv` | Gazetteer curado de nombres → sexo (lista genérica, no contiene datos de personas) |
 | `docs/plan_deduplicacion.md` | Método y decisiones de la deduplicación |
 | `docs/plan_inferir_atributos.md` | Método y decisiones de la inferencia sexo/edad |
+| `docs/infografia.html` | Infografía autocontenida de la base de-duplicada (agregados) |
 | `requirements.txt` | Dependencias Python |
 
 ## Privacidad

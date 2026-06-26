@@ -1,0 +1,347 @@
+<title>Personas desaparecidas · Venezuela 2026 — base de-duplicada</title>
+<meta name="description" content="Retrato de la base de-duplicada de personas reportadas desaparecidas tras el terremoto de Venezuela 2026: sexo, edad, estado y calidad de las ubicaciones.">
+<style>
+  :root{
+    --paper:#f6f7f5; --card:#ffffff; --ink:#1b2630; --ink-soft:#51606b; --muted:#7c8a93;
+    --line:#dde3de; --line-soft:#eaeee9;
+    --petrol:#15706b; --petrol-deep:#0d4f4b; --petrol-soft:#9fc6c2;
+    --ochre:#c2772b; --green:#3f8f5f; --violet:#6b5b95; --slate:#aeb8bd;
+    --maxw:1040px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font:400 16px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-variant-numeric:tabular-nums;
+  }
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:clamp(20px,4vw,56px) clamp(18px,4vw,40px);}
+  .eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--petrol-deep); font-weight:600;}
+  h1{font-size:clamp(1.9rem,4.6vw,3.1rem); line-height:1.05; margin:.35em 0 .25em; text-wrap:balance; font-weight:600;}
+  .stand{font-size:clamp(1rem,1.6vw,1.18rem); color:var(--ink-soft); max-width:64ch; text-wrap:pretty;}
+  .provenance{
+    margin-top:22px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;
+    padding:14px 18px; background:var(--card); border:1px solid var(--line); border-radius:10px;
+    font-size:.95rem; color:var(--ink-soft);
+  }
+  .provenance b{color:var(--ink); font-weight:600;}
+  .flow{display:flex; align-items:center; gap:10px;}
+  .flow .arrow{color:var(--petrol); font-weight:700;}
+
+  hr.rule{border:0; border-top:1px solid var(--line); margin:clamp(34px,5vw,52px) 0;}
+  section{margin-top:clamp(30px,4.5vw,46px);}
+  h2{font-size:1.06rem; letter-spacing:.02em; margin:0 0 4px; font-weight:600;}
+  .sub{font-size:.9rem; color:var(--muted); margin:0 0 18px;}
+
+  /* KPI row */
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  .kpi{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 18px 16px; position:relative; overflow:hidden;}
+  .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--petrol);}
+  .kpi.amber::before{background:var(--ochre);} .kpi.green::before{background:var(--green);} .kpi.slate::before{background:var(--muted);}
+  .kpi .num{font-size:clamp(1.7rem,3.4vw,2.4rem); font-weight:600; line-height:1;}
+  .kpi .lbl{margin-top:8px; font-size:.82rem; color:var(--ink-soft);}
+  .kpi .delta{font-size:.76rem; color:var(--muted); margin-top:3px;}
+
+  /* two-column blocks */
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,3.5vw,40px); align-items:start;}
+
+  /* bars */
+  .bars{display:flex; flex-direction:column; gap:11px;}
+  .bar{display:grid; grid-template-columns:8.5rem 1fr auto; align-items:center; gap:12px; font-size:.92rem;}
+  .bar .name{color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .track{height:14px; background:var(--line-soft); border-radius:7px; overflow:hidden;}
+  .fill{height:100%; width:var(--w); border-radius:7px; background:var(--petrol);
+        transform-origin:left; animation:grow .9s cubic-bezier(.22,.61,.36,1) both;}
+  .bar .val{font-weight:600; color:var(--ink); white-space:nowrap;}
+  .bar .val small{color:var(--muted); font-weight:400; margin-left:5px;}
+  @keyframes grow{from{transform:scaleX(0)} to{transform:scaleX(1)}}
+  @media(prefers-reduced-motion:reduce){.fill,.pyr-side .bar{animation:none}}
+
+  /* pirámide poblacional */
+  .pyr{display:flex; flex-direction:column; gap:9px; margin-top:4px;}
+  .pyr-head{display:grid; grid-template-columns:1fr 5.4rem 1fr; align-items:center;
+            font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
+  .pyr-head .l{text-align:right; padding-right:10px; color:var(--petrol-deep);}
+  .pyr-head .r{text-align:left; padding-left:10px; color:var(--violet);}
+  .pyr-row{display:grid; grid-template-columns:1fr 5.4rem 1fr; align-items:center;}
+  .pyr-side{display:flex; align-items:center; height:20px; overflow:hidden;}
+  .pyr-side.left{justify-content:flex-end;}
+  .pyr-side.right{justify-content:flex-start;}
+  .pyr-side .bar{height:100%; width:var(--w); min-width:2px;
+                 animation:grow .9s cubic-bezier(.22,.61,.36,1) both;}
+  .pyr-side.left .bar{transform-origin:right;}
+  .pyr-side.right .bar{transform-origin:left;}
+  .bar.m{background:var(--petrol);}
+  .bar.f{background:var(--violet);}
+  .bar.u{background:var(--slate); opacity:.65;}
+  .pyr-side .v{font-size:.8rem; font-weight:600; color:var(--ink-soft); white-space:nowrap;}
+  .pyr-side.left .v{padding-right:8px;} .pyr-side.right .v{padding-left:8px;}
+  .pyr-label{text-align:center; font-size:.86rem; color:var(--ink); white-space:nowrap;}
+  .pyr-row.nodata{margin-top:6px; padding-top:9px; border-top:1px dashed var(--line);}
+  .pyr-row.nodata .pyr-label{color:var(--muted);}
+  .pyr-legend{display:flex; gap:20px; flex-wrap:wrap; margin-top:16px; font-size:.86rem; color:var(--ink-soft);}
+  .pyr-legend .leg{display:flex; gap:8px; align-items:center;}
+  .pyr-legend .dot{width:11px; height:11px; border-radius:3px;}
+
+  /* donut */
+  .donut-wrap{display:flex; align-items:center; gap:26px; flex-wrap:wrap;}
+  .donut{--p:90.6; flex:0 0 auto; width:168px; height:168px; border-radius:50%;
+    background:conic-gradient(var(--ochre) 0 calc(var(--p)*1%), var(--green) 0);
+    -webkit-mask:radial-gradient(circle 50px at center, transparent 98%, #000 100%);
+            mask:radial-gradient(circle 50px at center, transparent 98%, #000 100%);}
+  .legend{display:flex; flex-direction:column; gap:12px;}
+  .leg{display:flex; gap:10px; align-items:baseline;}
+  .dot{width:11px; height:11px; border-radius:3px; flex:0 0 auto; translate:0 1px;}
+  .leg .v{font-weight:600;} .leg .v small{color:var(--muted); font-weight:400; margin-left:4px;}
+  .leg .t{font-size:.9rem; color:var(--ink-soft);}
+
+  /* quality cards */
+  .qgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .qcard{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px;}
+  .qcard .p{font-size:1.9rem; font-weight:600; line-height:1;}
+  .qcard .k{font-size:.86rem; color:var(--ink-soft); margin-top:6px;}
+  .qcard.good{border-top:4px solid var(--green);} .qcard.mid{border-top:4px solid var(--ochre);} .qcard.low{border-top:4px solid var(--muted);}
+  .note{background:#fbf6ee; border:1px solid #ecdcc4; border-left:4px solid var(--ochre); border-radius:10px;
+        padding:14px 16px; font-size:.92rem; color:#5b4a30; margin-top:18px;}
+  .note b{color:#4a3a22;}
+
+  footer{margin-top:clamp(36px,5vw,56px); padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:.82rem;}
+  footer p{margin:.5em 0; max-width:80ch;}
+  footer b{color:var(--ink-soft);}
+
+  @media(max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .cols{grid-template-columns:1fr;}
+    .qgrid{grid-template-columns:1fr;}
+    .bar{grid-template-columns:7rem 1fr auto;}
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Terremoto de Venezuela · 2026 · Estado La Guaira</div>
+    <h1 class="serif">Personas reportadas desaparecidas</h1>
+    <p class="stand">Retrato de la base <b>de-duplicada</b>: una fila por persona, no por reporte.
+       Construida sobre el registro comunitario de Venezuela Reporta — datos <b>sin verificar</b>,
+       presentados para apoyar la localización.</p>
+
+    <div class="provenance">
+      <span class="flow"><b>73.204</b>&nbsp;reportes crudos</span>
+      <span class="flow"><span class="arrow">→</span> deduplicación conservadora</span>
+      <span class="flow"><span class="arrow">→</span> <b>46.274</b>&nbsp;personas únicas</span>
+      <span style="color:var(--muted)">(se descartaron 26.930 reportes repetidos, 37%)</span>
+    </div>
+  </header>
+
+  <section aria-label="Cifras principales">
+    <div class="kpis">
+      <div class="kpi">
+        <div class="num">46.274</div>
+        <div class="lbl">Personas únicas</div>
+        <div class="delta">de 73.204 reportes</div>
+      </div>
+      <div class="kpi amber">
+        <div class="num">41.932</div>
+        <div class="lbl">Aún en búsqueda</div>
+        <div class="delta">90,6% de las personas</div>
+      </div>
+      <div class="kpi green">
+        <div class="num">4.342</div>
+        <div class="lbl">Encontradas o a salvo</div>
+        <div class="delta">9,4% de las personas</div>
+      </div>
+      <div class="kpi slate">
+        <div class="num">37%</div>
+        <div class="lbl">Reportes duplicados</div>
+        <div class="delta">misma persona, varias veces</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <div class="cols">
+    <section style="margin-top:0">
+      <h2>Estado de la búsqueda</h2>
+      <p class="sub">Una persona se cuenta como resuelta si <em>cualquiera</em> de sus reportes la marca encontrada o a salvo.</p>
+      <div class="donut-wrap">
+        <div class="donut" style="--p:90.6" role="img" aria-label="90,6% aún en búsqueda, 9,4% resueltas"></div>
+        <div class="legend">
+          <div class="leg"><span class="dot" style="background:var(--ochre)"></span>
+            <div><div class="v">41.932 <small>· 90,6%</small></div><div class="t">Aún en búsqueda</div></div></div>
+          <div class="leg"><span class="dot" style="background:var(--green)"></span>
+            <div><div class="v">4.342 <small>· 9,4%</small></div><div class="t">Encontradas / a salvo</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:0">
+      <h2>Sexo</h2>
+      <p class="sub">Inferido por persona (reportado → nombre → descripción). Cobertura 90%.</p>
+      <div class="bars">
+        <div class="bar"><span class="name">Femenino</span>
+          <span class="track"><span class="fill" style="--w:100%;background:var(--violet)"></span></span>
+          <span class="val">22.550<small>48,7%</small></span></div>
+        <div class="bar"><span class="name">Masculino</span>
+          <span class="track"><span class="fill" style="--w:84.3%;background:var(--petrol)"></span></span>
+          <span class="val">19.013<small>41,1%</small></span></div>
+        <div class="bar"><span class="name">Desconocido</span>
+          <span class="track"><span class="fill" style="--w:20.5%;background:var(--slate)"></span></span>
+          <span class="val">4.623<small>10,0%</small></span></div>
+        <div class="bar"><span class="name">Otro</span>
+          <span class="track"><span class="fill" style="--w:0.4%;background:var(--ochre)"></span></span>
+          <span class="val">88<small>0,2%</small></span></div>
+      </div>
+    </section>
+  </div>
+
+  <hr class="rule">
+
+  <section>
+    <h2>Rango de edad</h2>
+    <p class="sub">Grupos de vulnerabilidad estándar (UN OCHA). Inferido por persona; edad presente en 74% de los reportes.</p>
+    <div class="bars">
+      <div class="bar"><span class="name">0–4 (primera infancia)</span>
+        <span class="track"><span class="fill" style="--w:2.8%;background:var(--petrol-soft)"></span></span>
+        <span class="val">700<small>1,5%</small></span></div>
+      <div class="bar"><span class="name">5–17 (NNA)</span>
+        <span class="track"><span class="fill" style="--w:14.5%;background:#6fb0a8"></span></span>
+        <span class="val">3.663<small>7,9%</small></span></div>
+      <div class="bar"><span class="name">18–59 (adultos)</span>
+        <span class="track"><span class="fill" style="--w:100%;background:var(--petrol)"></span></span>
+        <span class="val">25.303<small>54,7%</small></span></div>
+      <div class="bar"><span class="name">60+ (adultos mayores)</span>
+        <span class="track"><span class="fill" style="--w:29.9%;background:var(--petrol-deep)"></span></span>
+        <span class="val">7.568<small>16,4%</small></span></div>
+      <div class="bar"><span class="name">Sin dato</span>
+        <span class="track"><span class="fill" style="--w:35.7%;background:var(--slate)"></span></span>
+        <span class="val">9.040<small>19,5%</small></span></div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <h2>Pirámide poblacional</h2>
+    <p class="sub">Personas por sexo y grupo de edad (UN OCHA). El gris al centro = sin sexo
+       determinado; la franja inferior = sin edad conocida. La incertidumbre del dato se muestra,
+       no se oculta.</p>
+    <div class="pyr">
+      <div class="pyr-head"><span class="l">◀ Masculino</span><span></span><span class="r">Femenino ▶</span></div>
+
+      <div class="pyr-row">
+        <div class="pyr-side left"><span class="v">3.612</span><span class="bar m" style="--w:29.1%"></span><span class="bar u" style="--w:1.09%"></span></div>
+        <div class="pyr-label">60+</div>
+        <div class="pyr-side right"><span class="bar u" style="--w:1.09%"></span><span class="bar f" style="--w:29.7%"></span><span class="v">3.686</span></div>
+      </div>
+
+      <div class="pyr-row">
+        <div class="pyr-side left"><span class="v">10.159</span><span class="bar m" style="--w:81.9%"></span><span class="bar u" style="--w:11.07%"></span></div>
+        <div class="pyr-label">18–59</div>
+        <div class="pyr-side right"><span class="bar u" style="--w:11.07%"></span><span class="bar f" style="--w:100%"></span><span class="v">12.399</span></div>
+      </div>
+
+      <div class="pyr-row">
+        <div class="pyr-side left"><span class="v">1.519</span><span class="bar m" style="--w:12.3%"></span><span class="bar u" style="--w:1.83%"></span></div>
+        <div class="pyr-label">5–17</div>
+        <div class="pyr-side right"><span class="bar u" style="--w:1.83%"></span><span class="bar f" style="--w:13.6%"></span><span class="v">1.691</span></div>
+      </div>
+
+      <div class="pyr-row">
+        <div class="pyr-side left"><span class="v">275</span><span class="bar m" style="--w:2.2%"></span><span class="bar u" style="--w:0.45%"></span></div>
+        <div class="pyr-label">0–4</div>
+        <div class="pyr-side right"><span class="bar u" style="--w:0.45%"></span><span class="bar f" style="--w:2.5%"></span><span class="v">314</span></div>
+      </div>
+
+      <div class="pyr-row nodata">
+        <div class="pyr-side left"><span class="v">3.448</span><span class="bar m" style="--w:27.8%"></span><span class="bar u" style="--w:4.56%"></span></div>
+        <div class="pyr-label">Edad<br>sin dato</div>
+        <div class="pyr-side right"><span class="bar u" style="--w:4.56%"></span><span class="bar f" style="--w:36.0%"></span><span class="v">4.460</span></div>
+      </div>
+    </div>
+    <div class="pyr-legend">
+      <span class="leg"><span class="dot" style="background:var(--petrol)"></span>Masculino · 19.013</span>
+      <span class="leg"><span class="dot" style="background:var(--violet)"></span>Femenino · 22.550</span>
+      <span class="leg"><span class="dot" style="background:var(--slate);opacity:.65"></span>Sexo sin dato · 4.711</span>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <h2>Ubicaciones, a grandes rasgos</h2>
+    <p class="sub">Personas por localidad (clasificadas por palabra clave sobre el texto de ubicación). El terremoto golpeó la franja costera de La Guaira.</p>
+    <div class="bars">
+      <div class="bar"><span class="name">La Guaira</span>
+        <span class="track"><span class="fill" style="--w:100%"></span></span>
+        <span class="val">17.275<small>37,3%</small></span></div>
+      <div class="bar"><span class="name">Catia La Mar</span>
+        <span class="track"><span class="fill" style="--w:38.6%"></span></span>
+        <span class="val">6.664<small>14,4%</small></span></div>
+      <div class="bar"><span class="name">Caraballeda</span>
+        <span class="track"><span class="fill" style="--w:14.8%"></span></span>
+        <span class="val">2.564<small>5,5%</small></span></div>
+      <div class="bar"><span class="name">Naiguatá</span>
+        <span class="track"><span class="fill" style="--w:9.5%"></span></span>
+        <span class="val">1.647<small>3,6%</small></span></div>
+      <div class="bar"><span class="name">Tanaguarena</span>
+        <span class="track"><span class="fill" style="--w:8.7%"></span></span>
+        <span class="val">1.507<small>3,3%</small></span></div>
+      <div class="bar"><span class="name">Macuto</span>
+        <span class="track"><span class="fill" style="--w:7.1%"></span></span>
+        <span class="val">1.225<small>2,6%</small></span></div>
+      <div class="bar"><span class="name">Caracas</span>
+        <span class="track"><span class="fill" style="--w:5.3%"></span></span>
+        <span class="val">908<small>2,0%</small></span></div>
+      <div class="bar"><span class="name">Maiquetía</span>
+        <span class="track"><span class="fill" style="--w:4.1%"></span></span>
+        <span class="val">705<small>1,5%</small></span></div>
+      <div class="bar"><span class="name" style="color:var(--muted)">Otras / sin clasificar</span>
+        <span class="track"><span class="fill" style="--w:78.2%;background:var(--slate)"></span></span>
+        <span class="val">13.517<small>29,2%</small></span></div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <h2>¿Qué tan bien sirven estas ubicaciones para un mapa?</h2>
+    <p class="sub">Toda persona tiene una ubicación (cobertura 100%), pero la precisión varía. Clasificación por nivel de detalle geográfico del texto.</p>
+    <div class="qgrid">
+      <div class="qcard low">
+        <div class="p" style="color:var(--muted)">43,0%</div>
+        <div class="k"><b>Solo ciudad / municipio</b><br>19.919 personas. Geocodifica al centro de la localidad, no a un punto.</div>
+      </div>
+      <div class="qcard mid">
+        <div class="p" style="color:var(--ochre)">28,4%</div>
+        <div class="k"><b>Barrio o sector</b><br>13.119 personas. Acerca a una zona, sin dirección exacta.</div>
+      </div>
+      <div class="qcard good">
+        <div class="p" style="color:var(--green)">28,6%</div>
+        <div class="k"><b>Dirección o lugar específico</b><br>13.236 personas. Calle, edificio, hospital, playa… geocodificable a un punto.</div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Hallazgo para el mapa:</b> los campos estructurados de dirección vienen casi vacíos
+      —<b>dirección precisa 0%</b>, última ubicación 0%, zona/barrio 1,2%—. Todo el detalle
+      geográfico está embebido en el texto libre de <code>ubicacion</code>. Un mapa exigirá
+      <b>geocodificación con NLP</b> sobre ese texto; hoy ~3 de cada 10 personas tienen suficiente
+      detalle para ubicarlas en un punto, y ~6 de cada 10 al menos a nivel de barrio.
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Método.</b> Deduplicación conservadora: cédulas distintas nunca se fusionan; el nombre solo
+       no basta sin corroboración (edad, sexo o lugar específico) — para personas desaparecidas,
+       fusionar de más es peor que dejar duplicados. Sexo y edad inferidos 100% offline
+       (gazetteer de nombres + morfología + descripción), nunca inventados: vacío cuando no hay señal.</p>
+    <p><b>Fuente de datos.</b> Venezuela Reporta — registro comunitario humanitario, sin verificar:
+       <a href="https://venezuelareporta.org/buscar" style="color:var(--petrol-deep)">venezuelareporta.org/buscar</a>.
+       Extracción de 73.204 reportes · 2026-06-26. Cifras por persona sobre la base de-duplicada (46.274).</p>
+    <p><b>Uso responsable.</b> Contiene datos personales sensibles de personas vulnerables. Usar solo
+       para apoyar su localización; no redistribuir contactos fuera de ese fin.</p>
+  </footer>
+
+</div>
