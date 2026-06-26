@@ -206,6 +206,10 @@ S = {
   "es": '<b>Uso responsable:</b> contiene datos personales sensibles de población vulnerable. Usar solo para apoyar su localización; no redistribuir contactos fuera de ese fin.',
   "en": '<b>Responsible use:</b> contains sensitive personal data of vulnerable people. Use only to support locating them; do not redistribute contacts beyond that purpose.',
   "fr": '<b>Usage responsable :</b> contient des données personnelles sensibles de personnes vulnérables. À utiliser uniquement pour aider à les localiser ; ne pas rediffuser les contacts au-delà de cette finalité.'},
+ "authors": {
+  "es": 'Autoría: <a href="https://www.olds2030.org/">OLDS2030</a> · desarrollo e infografía por <a href="https://github.com/juanacasique">Juana Casique</a> y <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
+  "en": 'Authorship: <a href="https://www.olds2030.org/">OLDS2030</a> · development and infographic by <a href="https://github.com/juanacasique">Juana Casique</a> and <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
+  "fr": 'Auteurs : <a href="https://www.olds2030.org/">OLDS2030</a> · développement et infographie par <a href="https://github.com/juanacasique">Juana Casique</a> et <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.'},
 }
 
 
@@ -364,6 +368,7 @@ def main():
         d["repo"] = L("repo")
         d["method_foot"] = L("method_foot")
         d["use"] = L("use")
+        d["authors"] = L("authors")
         return d
 
     REG = {lang: build(lang) for lang in LANGS}
@@ -621,6 +626,7 @@ TEMPLATE = r"""<title>Personas desaparecidas · Venezuela 2026 — base de-dupli
       <span class="olds-logo olds-logo--ft" aria-hidden="true"></span>
       <span data-i18n-html="credit">@@credit@@</span>
     </div>
+    <p data-i18n-html="authors">@@authors@@</p>
     <p data-i18n-html="source">@@source@@</p>
     <p data-i18n-html="repo">@@repo@@</p>
     <p data-i18n-html="method_foot">@@method_foot@@</p>

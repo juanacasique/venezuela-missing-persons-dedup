@@ -116,6 +116,13 @@ Ver `docs/plan_inferir_atributos.md`.
 | `assets/olds_logo.png` | Logo de OLDS (se incrusta en la infografía) |
 | `requirements.txt` | Dependencias Python |
 
+## Autoría y créditos
+
+Proyecto del **[Observatorio Latinoamericano de Desarrollo Sostenible (OLDS2030)](https://www.olds2030.org/)**.
+
+- **[Juana Casique](https://github.com/juanacasique)** — parte del desarrollo y la infografía.
+- **[Alberto Castillo Aroca](https://github.com/alcastaro)** — deduplicación e inferencia.
+
 ## Privacidad
 
 Este repositorio contiene **solo código**. Los datos de personas (CSV/DB) **nunca se versionan**
