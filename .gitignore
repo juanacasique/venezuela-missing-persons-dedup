@@ -1,0 +1,45 @@
+# ─── Datos personales sensibles: NUNCA publicar ─────────────────────────────
+# Personas reportadas desaparecidas: PII de población vulnerable, sin verificar.
+# La carpeta de datos completa queda fuera del repo, pase lo que pase.
+data/
+
+# Cualquier dato suelto (en cualquier carpeta), por extensión:
+*.csv
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.parquet
+*.xlsx
+*.json
+
+# ...salvo assets curados que SÍ se versionan (no contienen datos de personas):
+!nombres_genero.csv
+
+# Casos de prueba con nombres reales (validación local; queda privado):
+casos_prueba.json
+
+# ─── Webscraping: NO se publica (repo público = solo deduplicación) ─────────
+scraper.py
+docs/REPORTE.md
+
+# ─── Memoria/instrucciones privadas de Claude — NUNCA commitear ─────────────
+CLAUDE.md
+.claude/
+
+# ─── Secretos / entorno ─────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+
+# ─── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# ─── OS / editor ────────────────────────────────────────────────────────────
+.DS_Store

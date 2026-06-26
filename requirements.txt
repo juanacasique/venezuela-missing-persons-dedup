@@ -1,0 +1,3 @@
+# Deduplicación e inferencia
+pandas>=2.0
+rapidfuzz>=3.0
