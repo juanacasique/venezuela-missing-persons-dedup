@@ -242,6 +242,11 @@ TEMPLATE = r"""<title>Personas desaparecidas · Venezuela 2026 — base de-dupli
   .method{background:#e7f1f9; border:1px solid #c7def0; border-left:4px solid var(--blue-deep);
     border-radius:10px; padding:15px 18px; margin-top:18px; font-size:.95rem; color:#234a64;}
   .method b{color:var(--blue-deep);}
+  .srcnote{display:flex; gap:10px; align-items:baseline; margin-top:12px; padding:11px 16px;
+    background:#fff; border:1px dashed var(--blue); border-radius:10px; font-size:.88rem; color:var(--ink-soft);}
+  .srcnote .tag{flex:0 0 auto; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+    font-weight:700; color:#fff; background:var(--blue); border-radius:5px; padding:3px 8px; translate:0 -1px;}
+  .srcnote b{color:var(--blue-deep);}
   hr.rule{border:0; border-top:1px solid var(--line); margin:clamp(30px,4.5vw,46px) 0;}
   section{margin-top:clamp(28px,4vw,42px);}
   h2{font-size:1.08rem; letter-spacing:.01em; margin:0 0 4px; font-weight:700; color:var(--navy);}
@@ -350,6 +355,12 @@ TEMPLATE = r"""<title>Personas desaparecidas · Venezuela 2026 — base de-dupli
     <span class="flow"><span class="arrow">→</span> deduplicación conservadora</span>
     <span class="flow"><span class="arrow">→</span> <b>__TOTAL__</b>&nbsp;personas únicas</span>
     <span style="color:var(--muted)">(se descartaron __DUP_N__ reportes repetidos, __DUP_PCT__)</span>
+  </div>
+
+  <div class="srcnote">
+    <span class="tag">Fuentes en expansión</span>
+    <span>Por ahora los datos provienen <b>únicamente de Venezuela Reporta</b>. Se están integrando
+    otras bases de datos para ampliar la cobertura; las cifras crecerán al sumar nuevas fuentes.</span>
   </div>
 
   <div class="method">
@@ -462,9 +473,10 @@ __CITY_ROWS__
       Desarrollo Sostenible</a></b> con datos ciudadanos compartidos en abierto sin verificar. La
       información es <b>indicativa</b> y debe utilizarse con cuidado y contrastar con otras fuentes.</span>
     </div>
-    <p><b>Fuente de datos:</b> Venezuela Reporta — registro comunitario humanitario, sin verificar
-       (<a href="https://venezuelareporta.org/buscar">venezuelareporta.org</a>). Cifras por persona
-       sobre la base de-duplicada (__TOTAL__ personas de __REPORTES__ reportes).</p>
+    <p><b>Fuente de datos (en expansión):</b> por ahora únicamente Venezuela Reporta — registro
+       comunitario humanitario, sin verificar (<a href="https://venezuelareporta.org/buscar">venezuelareporta.org</a>).
+       Se están integrando otras bases de datos. Cifras por persona sobre la base de-duplicada
+       (__TOTAL__ personas de __REPORTES__ reportes).</p>
     <p><b>Metodología y código abierto:</b> <a href="https://github.com/alcastaro/venezuela-missing-persons-dedup">github.com/alcastaro/venezuela-missing-persons-dedup</a> — ahí se puede revisar el método de deduplicación y contribuir.</p>
     <p><b>Método:</b> deduplicación conservadora (cédulas distintas no se fusionan; el nombre solo no
        basta sin corroboración por edad, sexo o lugar específico). Sexo y edad inferidos 100% offline,
