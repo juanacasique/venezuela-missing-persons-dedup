@@ -1,3 +1,6 @@
 # Deduplicación e inferencia
 pandas>=2.0
 rapidfuzz>=3.0
+
+# Cliente HTTP para la API abierta de Venezuela Reporta
+requests>=2.31
