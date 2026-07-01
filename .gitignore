@@ -17,6 +17,10 @@ data/
 # ...salvo assets curados que SÍ se versionan (no contienen datos de personas):
 !nombres_genero.csv
 
+# Snapshots de la infografía: SOLO cifras agregadas por fecha (sin PII) — base de
+# la tendencia. Se versiona para que el histórico sobreviva y acumule entre cortes.
+!docs/api_snapshots.json
+
 # Casos de prueba con nombres reales (validación local; queda privado):
 casos_prueba.json
 
