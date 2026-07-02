@@ -94,9 +94,9 @@ S = {
         "en": "People reported after the earthquake",
         "fr": "Personnes signalées après le séisme"},
  "stand": {
-  "es": 'Quiénes son las personas afectadas, según los datos abiertos de Venezuela Reporta —ya <b style="color:#fff">de-duplicados en origen</b>—: <b style="color:#fff">sexo y edad</b> de quienes aún se buscan, de quienes fueron encontradas y de quienes ingresaron a hospitales. Datos ciudadanos <b style="color:#fff">sin verificar</b>; información indicativa.',
-  "en": 'Who the affected people are, from Venezuela Reporta’s open data —already <b style="color:#fff">de-duplicated at source</b>—: <b style="color:#fff">sex and age</b> of those still missing, those found, and those admitted to hospitals. Citizen-sourced, <b style="color:#fff">unverified</b> data; indicative information.',
-  "fr": 'Qui sont les personnes affectées, d’après les données ouvertes de Venezuela Reporta —déjà <b style="color:#fff">dédoublonnées à la source</b>—: <b style="color:#fff">sexe et âge</b> de celles toujours recherchées, retrouvées, ou admises à l’hôpital. Données citoyennes <b style="color:#fff">non vérifiées</b> ; information indicative.'},
+  "es": 'Quiénes son las personas afectadas tras el terremoto: <b style="color:#fff">sexo y edad</b> de quienes aún se buscan, de quienes fueron encontradas y de quienes ingresaron a hospitales. A partir de datos ciudadanos abiertos de Venezuela Reporta, <b style="color:#fff">sin verificar</b>; información indicativa.',
+  "en": 'Who the people affected by the earthquake are: <b style="color:#fff">sex and age</b> of those still missing, those found, and those admitted to hospitals. Based on open, citizen-sourced data from Venezuela Reporta, <b style="color:#fff">unverified</b>; indicative information.',
+  "fr": 'Qui sont les personnes affectées par le séisme : <b style="color:#fff">sexe et âge</b> de celles toujours recherchées, retrouvées, ou admises à l’hôpital. À partir de données citoyennes ouvertes de Venezuela Reporta, <b style="color:#fff">non vérifiées</b> ; information indicative.'},
  "updated": {"es": "Actualizado:", "en": "Updated:", "fr": "Mis à jour :"},
  "prov_api": {"es": "API abierta", "en": "open API", "fr": "API ouverte"},
  "prov_dedup": {"es": "de-duplicada en origen", "en": "de-duplicated at source", "fr": "dédoublonnée à la source"},
@@ -202,6 +202,21 @@ S = {
   "en": 'Infographic and analysis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Forked from the original work by <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
   "fr": 'Infographie et analyse : <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurqué du travail original d’<a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.'},
 
+ # --- Panorama / análisis (para periodistas, arriba, estilo humanitario) ---
+ "analysis_h2": {"es": "El panorama", "en": "The situation", "fr": "La situation"},
+ "analysis_body": {
+  "es": 'Tras el terremoto, <b>{busca} personas</b> siguen reportadas como desaparecidas —el <b>{buscap}</b> del registro—, mientras <b>{res}</b> ya fueron encontradas o están a salvo. De quienes aún se buscan, el <b>{femp} son mujeres</b>, frente a un <b>{mascp} de hombres</b>; del <b>{descp}</b> restante no se conoce el sexo, así que ninguna cifra debe leerse como "el resto". Entre las personas buscadas hay <b>{ninos} niñas, niños y adolescentes</b> y <b>{mayores} personas mayores de 60 años</b> — los grupos que suelen requerir atención prioritaria. Los reportes se concentran en <b>{ciudad}</b>. Por separado, <b>{ing} personas</b> figuran en listas de ingreso a hospitales y refugios.',
+  "en": 'After the earthquake, <b>{busca} people</b> are still reported missing —<b>{buscap}</b> of the registry— while <b>{res}</b> have been found or are safe. Of those still missing, <b>{femp} are women</b>, compared with <b>{mascp} men</b>; for the remaining <b>{descp}</b> the sex is unknown, so no figure should be read as "the rest". Among those missing are <b>{ninos} children and adolescents</b> and <b>{mayores} people over 60</b> — the groups that usually require priority attention. Reports concentrate in <b>{ciudad}</b>. Separately, <b>{ing} people</b> appear on hospital and shelter admission lists.',
+  "fr": 'Après le séisme, <b>{busca} personnes</b> sont toujours portées disparues —<b>{buscap}</b> du registre— tandis que <b>{res}</b> ont été retrouvées ou sont en sécurité. Parmi les personnes recherchées, <b>{femp} sont des femmes</b>, contre <b>{mascp} d’hommes</b> ; pour les <b>{descp}</b> restants, le sexe est inconnu — aucun chiffre ne doit donc se lire comme « le reste ». Parmi elles, <b>{ninos} enfants et adolescents</b> et <b>{mayores} personnes de plus de 60 ans</b> — les groupes qui requièrent souvent une attention prioritaire. Les signalements se concentrent à <b>{ciudad}</b>. Par ailleurs, <b>{ing} personnes</b> figurent sur les listes d’admission aux hôpitaux et refuges.'},
+ # --- Encabezado de la sección técnica (al final) ---
+ "tech_h2": {"es": "Metodología, fuentes y calidad del dato",
+             "en": "Methodology, sources and data quality",
+             "fr": "Méthodologie, sources et qualité des données"},
+ "tech_sub": {
+  "es": "Cómo se obtienen, deduplican e infieren estos datos, y qué tan completos son. Para lectores que quieran auditar el método.",
+  "en": "How this data is obtained, de-duplicated and inferred, and how complete it is. For readers who want to audit the method.",
+  "fr": "Comment ces données sont obtenues, dédoublonnées et déduites, et leur degré de complétude. Pour les lecteurs qui veulent auditer la méthode."},
+
  # --- Cifras clave (#1) ---
  "cifras_h2": {"es": "Cifras clave", "en": "Key figures", "fr": "Chiffres clés"},
  "cifras_sub": {
@@ -217,9 +232,30 @@ S = {
  "cc_60": {"es": "<b>personas mayores de 60</b> aún sin localizar",
            "en": "<b>older adults (60+)</b> still unlocated",
            "fr": "<b>personnes de plus de 60 ans</b> non localisées"},
- "cc_fem": {"es": "de las aún buscadas <b>son mujeres</b>",
-            "en": "of those still missing <b>are women</b>",
-            "fr": "des personnes recherchées <b>sont des femmes</b>"},
+ "cc_fem": {"es": "de las aún buscadas <b>son mujeres</b>, frente a {mp} de hombres; del {up} no se conoce el sexo",
+            "en": "of those still missing <b>are women</b>, vs. {mp} men; sex unknown for {up}",
+            "fr": "des personnes recherchées <b>sont des femmes</b>, contre {mp} d’hommes ; sexe inconnu pour {up}"},
+
+ # --- Qué implican estos datos (#lectura humanitaria) ---
+ "implic_h2": {"es": "Qué implican estos datos",
+               "en": "What these figures imply",
+               "fr": "Ce que ces chiffres impliquent"},
+ "implic_sub": {
+  "es": "Lectura humanitaria de la composición por sexo y edad de quienes aún se buscan. Interpretación indicativa sobre datos sin verificar.",
+  "en": "A humanitarian reading of the sex and age composition of those still missing. Indicative interpretation of unverified data.",
+  "fr": "Lecture humanitaire de la composition par sexe et âge des personnes recherchées. Interprétation indicative de données non vérifiées."},
+ "implic_1": {
+  "es": '<b>Mujeres, leve mayoría — y un {descp} es incógnita.</b> El {femp} de quienes se buscan son mujeres y el {mascp} hombres. El resto no tiene sexo conocido: cada porcentaje es un piso, no un techo, y la respuesta no debería asumir que las personas sin dato son hombres.',
+  "en": '<b>Women are a slight majority — and {descp} is unknown.</b> {femp} of those missing are women and {mascp} men. The rest have no known sex: each share is a floor, not a ceiling, and the response should not assume the unknowns are men.',
+  "fr": '<b>Les femmes, légère majorité — et {descp} d’inconnues.</b> {femp} des personnes recherchées sont des femmes et {mascp} des hommes. Le reste n’a pas de sexe connu : chaque part est un plancher, pas un plafond, et la réponse ne doit pas supposer que les inconnus sont des hommes.'},
+ "implic_2": {
+  "es": '<b>Mujeres adultas, las más sobrerrepresentadas.</b> Entre 35 y 54 años se buscan <b>{f3554} mujeres</b> frente a <b>{m3554} hombres</b> ({extra} más). El colapso golpeó sobre todo edificios residenciales de la franja costera, y estas edades concentran a quienes sostienen hogares — un indicio de familias enteras afectadas y de separación familiar.',
+  "en": '<b>Adult women are the most overrepresented.</b> Between ages 35 and 54, <b>{f3554} women</b> are missing versus <b>{m3554} men</b> ({extra} more). The collapse mainly hit residential buildings along the coastal strip, and these ages concentrate those sustaining households — a sign of entire families affected and of family separation.',
+  "fr": '<b>Les femmes adultes, les plus surreprésentées.</b> Entre 35 et 54 ans, <b>{f3554} femmes</b> sont recherchées contre <b>{m3554} hommes</b> ({extra} de plus). L’effondrement a surtout touché des immeubles résidentiels du littoral, et ces âges concentrent les personnes qui soutiennent les foyers — signe de familles entières affectées et de séparations familiales.'},
+ "implic_3": {
+  "es": '<b>Implicaciones para la respuesta.</b> Con mayoría femenina y <b>{ninos} NNA</b> y <b>{mayores} personas 60+</b> aún buscadas, los estándares humanitarios (Esfera, guías de género IASC) priorizan: salud materna y obstétrica, kits de dignidad e higiene menstrual, saneamiento seguro e iluminado en refugios, prevención de la violencia de género, reunificación familiar y protección de niñez y personas mayores.',
+  "en": '<b>Implications for the response.</b> With a female majority and <b>{ninos} children</b> and <b>{mayores} people 60+</b> still missing, humanitarian standards (Sphere, IASC gender guidance) prioritise: maternal and obstetric health, dignity and menstrual hygiene kits, safe and well-lit sanitation in shelters, gender-based violence prevention, family reunification and protection of children and older people.',
+  "fr": '<b>Implications pour la réponse.</b> Avec une majorité féminine et <b>{ninos} enfants</b> et <b>{mayores} personnes 60+</b> toujours recherchés, les standards humanitaires (Sphère, directives genre IASC) priorisent : santé maternelle et obstétricale, kits de dignité et d’hygiène menstruelle, assainissement sûr et éclairé dans les refuges, prévention des violences de genre, réunification familiale et protection des enfants et des aînés.'},
 
  # --- Semáforo de confiabilidad ---
  "conf_lbl": {"es": "Confiabilidad del dato", "en": "Data reliability", "fr": "Fiabilité des données"},
@@ -349,6 +385,14 @@ def main():
     cc_517 = band_total(busc, "5-17")
     cc_60 = band_total(busc, "60+")
     busc_fpct = 100 * busc["F"] / busc["N"] if busc["N"] else 0
+    busc_mpct = 100 * busc["M"] / busc["N"] if busc["N"] else 0
+    busc_upct = 100 * busc["U"] / busc["N"] if busc["N"] else 0
+
+    # sobre-representación de mujeres adultas (35–54) entre las aún buscadas
+    edad_b = pd.to_numeric(busca_df["edad_estimada"], errors="coerce")
+    f3554 = int(((busca_df["sexo_inferido"] == "Femenino") & edad_b.between(35, 54)).sum())
+    m3554 = int(((busca_df["sexo_inferido"] == "Masculino") & edad_b.between(35, 54)).sum())
+    extra3554 = 100 * (f3554 - m3554) / m3554 if m3554 else 0
 
     # completitud del dato (#5): proporción del registro con cada atributo.
     # Ubicación = % con localidad RECONOCIDA (no vacía y no "otras/sin indicar"),
@@ -435,9 +479,11 @@ def main():
         for k in ["lang_label", "eyebrow", "h1", "stand", "estado_h2", "estado_sub",
                   "sexo_h2", "edad_h2", "method", "credit", "repo", "method_foot",
                   "use", "authors", "ubic_h2", "ubic_sub", "pyr_intro_h2", "pyr_intro_sub",
-                  "cifras_h2", "cifras_sub", "conf_lbl", "conf_val", "conf_note",
+                  "cifras_h2", "cifras_sub", "implic_h2", "implic_sub",
+                  "conf_lbl", "conf_val", "conf_note",
                   "trend_h2", "trend_sub", "compl_h2", "compl_sub",
-                  "caveat_h2", "caveat_yes_h", "caveat_no_h", "caveat_yes", "caveat_no"]:
+                  "caveat_h2", "caveat_yes_h", "caveat_no_h", "caveat_yes", "caveat_no",
+                  "analysis_h2", "tech_h2", "tech_sub"]:
             d[k] = L(k)
         d["updated"] = f'{L("updated")} <b>{TS[lang]}</b>'
         d["provenance"] = (
@@ -472,6 +518,25 @@ def main():
                           + bar(L("otras"), otras, N, 100*otras/maxc, lang, "var(--slate)", muted=True))
         d["source"] = L("source").format(tot=fmt_int(N, lang), ing=fmt_int(n_ing, lang))
 
+        # Panorama / análisis narrativo (arriba, para periodistas)
+        d["analysis_body"] = L("analysis_body").format(
+            busca=fmt_int(se_busca, lang), buscap=fmt_pct(p_busca, lang),
+            res=fmt_int(resuelto, lang), femp=fmt_pcti(busc_fpct, lang),
+            mascp=fmt_pcti(busc_mpct, lang), descp=fmt_pcti(busc_upct, lang),
+            ninos=fmt_int(cc_04 + cc_517, lang), mayores=fmt_int(cc_60, lang),
+            ciudad=(nombradas[0][0] if nombradas else "—"), ing=fmt_int(n_ing, lang))
+
+        # Qué implican estos datos (lectura humanitaria)
+        d["implicaciones"] = "".join(
+            f'<div class="imp">{txt}</div>' for txt in [
+                L("implic_1").format(femp=fmt_pcti(busc_fpct, lang),
+                                     mascp=fmt_pcti(busc_mpct, lang),
+                                     descp=fmt_pcti(busc_upct, lang)),
+                L("implic_2").format(f3554=fmt_int(f3554, lang), m3554=fmt_int(m3554, lang),
+                                     extra=fmt_pcti(extra3554, lang)),
+                L("implic_3").format(ninos=fmt_int(cc_04 + cc_517, lang),
+                                     mayores=fmt_int(cc_60, lang))])
+
         # Cifras clave (#1)
         def cc_item(n, txt):
             return f'<div class="cc"><div class="cc-n">{n}</div><div class="cc-t">{txt}</div></div>'
@@ -479,7 +544,9 @@ def main():
             cc_item(fmt_int(cc_04, lang), L("cc_04")),
             cc_item(fmt_int(cc_517, lang), L("cc_517")),
             cc_item(fmt_int(cc_60, lang), L("cc_60")),
-            cc_item(fmt_pcti(busc_fpct, lang), L("cc_fem"))])
+            cc_item(fmt_pcti(busc_fpct, lang),
+                    L("cc_fem").format(mp=fmt_pcti(busc_mpct, lang),
+                                       up=fmt_pcti(busc_upct, lang)))])
 
         # Completitud del dato (#5)
         def cbar(lbl, pct):
@@ -531,7 +598,10 @@ def main():
     print(f"  actualizado: {TS['es']}")
 
 
-TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pirámides (API abierta)</title>
+TEMPLATE = r"""<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personas reportadas · Venezuela 2026 — sexo, edad y pirámides (API abierta)</title>
 <meta name="description" content="Sexo, edad y pirámides poblacionales de las personas reportadas tras el terremoto de Venezuela 2026, desde la API abierta de Venezuela Reporta (deduplicada en origen): aún buscadas, encontradas e ingresos a hospitales. Enfoque en impactos. Por Juana Casique (Kognis).">
 <style>
   :root{
@@ -588,6 +658,20 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
   section{margin-top:clamp(28px,4vw,42px);}
   h2{font-size:1.08rem; letter-spacing:.01em; margin:0 0 4px; font-weight:700; color:var(--navy);}
   .sub{font-size:.9rem; color:var(--muted); margin:0 0 18px; max-width:78ch; text-wrap:pretty;}
+
+  /* Panorama / análisis (lead para periodistas) */
+  .analysis{margin-top:clamp(-30px,-4vw,-22px); position:relative;
+    background:var(--card); border:1px solid var(--line); border-left:4px solid var(--blue-deep);
+    border-radius:12px; padding:20px 24px; box-shadow:0 6px 20px rgba(11,79,122,.07);}
+  .analysis h2{font-size:1.16rem; margin-bottom:8px;}
+  .analysis-body{font-size:1.08rem; line-height:1.62; color:var(--ink); max-width:74ch; margin:0;}
+  .analysis-body b{color:var(--navy); font-weight:700;}
+
+  /* Sección técnica (al final) */
+  .tech-sec h3{font-size:1rem; color:var(--navy); margin:22px 0 4px; font-weight:700;}
+  .tech-sec .provenance{margin-top:16px;}
+  .compl-block{margin-top:6px;}
+
   .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
   .kpi{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; position:relative; overflow:hidden;}
   .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--blue);}
@@ -613,6 +697,13 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
   .cc-n{font-size:clamp(1.9rem,4vw,2.6rem); font-weight:800; line-height:1; letter-spacing:-.01em;}
   .cc-t{margin-top:9px; font-size:.86rem; line-height:1.35; color:#dbe9f5;}
   .cc-t b{color:#fff; font-weight:700;}
+
+  /* Qué implican estos datos */
+  .implic-sec{margin-top:clamp(24px,3.5vw,34px);}
+  .implic{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .imp{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--amber);
+    border-radius:12px; padding:16px 18px; font-size:.92rem; line-height:1.5; color:var(--ink-soft);}
+  .imp b{color:var(--navy);}
 
   /* Tendencia */
   .trend-sec{margin-top:clamp(22px,3vw,30px);}
@@ -706,6 +797,9 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
   footer a{color:var(--blue-deep); font-weight:600; text-decoration:none; border-bottom:1px solid var(--blue-soft);}
   footer a:hover{border-bottom-color:var(--blue-deep);}
   a:focus-visible{outline:2px solid var(--blue); outline-offset:2px;}
+  @media(max-width:900px){
+    .implic{grid-template-columns:1fr;}
+  }
   @media(max-width:760px){
     .kpis{grid-template-columns:repeat(2,1fr);}
     .cifras{grid-template-columns:repeat(2,1fr);}
@@ -717,6 +811,16 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
     .langlbl{display:none;} .langbar-in{justify-content:center;}
     .pyr-head, .pyr-row{grid-template-columns:1fr 4.4rem 1fr;}
     .pyr-side .v small{display:none;}
+  }
+  @media(max-width:430px){
+    .cifras{grid-template-columns:1fr;}
+    .bar{grid-template-columns:5.6rem 1fr auto; font-size:.86rem; gap:8px;}
+    .bar .val small{display:none;}
+    .trend-chips{flex-direction:column; align-items:flex-start;}
+    .donut{width:132px; height:132px;}
+    .pyr-head, .pyr-row{grid-template-columns:1fr 3.6rem 1fr;}
+    .pyr-side .v{font-size:.72rem;}
+    .credit{padding:14px 16px;}
   }
 </style>
 
@@ -744,15 +848,16 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
 
 <div class="wrap">
 
-  <div class="provenance" data-i18n-html="provenance">@@provenance@@</div>
-  <div class="srcnote" data-i18n-html="srcnote">@@srcnote@@</div>
-  <div class="method" data-i18n-html="method">@@method@@</div>
-
-  <div class="conf">
-    <span class="conf-badge"><span class="conf-lbl" data-i18n-html="conf_lbl">@@conf_lbl@@</span>
-      <span class="conf-val" data-i18n-html="conf_val">@@conf_val@@</span></span>
-    <span class="conf-note" data-i18n-html="conf_note">@@conf_note@@</span>
-  </div>
+  <!-- ─── PANORAMA / ANÁLISIS (arriba, para periodistas) ─── -->
+  <section class="analysis" style="margin-top:0">
+    <h2 data-i18n-html="analysis_h2">@@analysis_h2@@</h2>
+    <p class="analysis-body" data-i18n-html="analysis_body">@@analysis_body@@</p>
+    <div class="conf">
+      <span class="conf-badge"><span class="conf-lbl" data-i18n-html="conf_lbl">@@conf_lbl@@</span>
+        <span class="conf-val" data-i18n-html="conf_val">@@conf_val@@</span></span>
+      <span class="conf-note" data-i18n-html="conf_note">@@conf_note@@</span>
+    </div>
+  </section>
 
   <section aria-label="KPIs" style="margin-top:22px">
     <div class="kpis" data-i18n-html="kpis">@@kpis@@</div>
@@ -762,6 +867,12 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
     <h2 data-i18n-html="cifras_h2">@@cifras_h2@@</h2>
     <p class="sub" data-i18n-html="cifras_sub">@@cifras_sub@@</p>
     <div class="cifras" data-i18n-html="cifras">@@cifras@@</div>
+  </section>
+
+  <section class="implic-sec">
+    <h2 data-i18n-html="implic_h2">@@implic_h2@@</h2>
+    <p class="sub" data-i18n-html="implic_sub">@@implic_sub@@</p>
+    <div class="implic" data-i18n-html="implicaciones">@@implicaciones@@</div>
   </section>
 
   <section class="trend-sec">
@@ -799,14 +910,6 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
   <hr class="rule">
 
   <section>
-    <h2 data-i18n-html="compl_h2">@@compl_h2@@</h2>
-    <p class="sub" data-i18n-html="compl_sub">@@compl_sub@@</p>
-    <div class="cbars" data-i18n-html="completeness">@@completeness@@</div>
-  </section>
-
-  <hr class="rule">
-
-  <section>
     <h2 data-i18n-html="pyr_intro_h2">@@pyr_intro_h2@@</h2>
     <p class="sub" data-i18n-html="pyr_intro_sub">@@pyr_intro_sub@@</p>
     <div data-i18n-html="pyramids">@@pyramids@@</div>
@@ -833,6 +936,22 @@ TEMPLATE = r"""<title>Personas reportadas · Venezuela 2026 — sexo, edad y pir
         <h3 data-i18n-html="caveat_no_h">@@caveat_no_h@@</h3>
         <ul data-i18n-html="caveat_no">@@caveat_no@@</ul>
       </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ─── SECCIÓN TÉCNICA (al final, para quien quiera auditar el método) ─── -->
+  <section class="tech-sec">
+    <h2 data-i18n-html="tech_h2">@@tech_h2@@</h2>
+    <p class="sub" data-i18n-html="tech_sub">@@tech_sub@@</p>
+    <div class="provenance" data-i18n-html="provenance">@@provenance@@</div>
+    <div class="srcnote" data-i18n-html="srcnote">@@srcnote@@</div>
+    <div class="method" data-i18n-html="method">@@method@@</div>
+    <div class="compl-block">
+      <h3 data-i18n-html="compl_h2">@@compl_h2@@</h3>
+      <p class="sub" data-i18n-html="compl_sub">@@compl_sub@@</p>
+      <div class="cbars" data-i18n-html="completeness">@@completeness@@</div>
     </div>
   </section>
 
