@@ -207,9 +207,9 @@ S = {
   "en": '<b>Responsible use:</b> contains sensitive personal data of vulnerable people. Use only to support locating them; do not redistribute contacts beyond that purpose.',
   "fr": '<b>Usage responsable :</b> contient des données personnelles sensibles de personnes vulnérables. À utiliser uniquement pour aider à les localiser ; ne pas rediffuser les contacts au-delà de cette finalité.'},
  "authors": {
-  "es": 'Autoría: <a href="https://www.olds2030.org/">OLDS2030</a> · desarrollo e infografía por <a href="https://github.com/juanacasique">Juana Casique</a> y <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
-  "en": 'Authorship: <a href="https://www.olds2030.org/">OLDS2030</a> · development and infographic by <a href="https://github.com/juanacasique">Juana Casique</a> and <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
-  "fr": 'Auteurs : <a href="https://www.olds2030.org/">OLDS2030</a> · développement et infographie par <a href="https://github.com/juanacasique">Juana Casique</a> et <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.'},
+  "es": 'Autoría: <a href="https://www.olds2030.org/">OLDS2030</a> · desarrollo e infografía por <a href="https://github.com/juanacasique">Juana Casique</a> y <a href="https://github.com/alcastaro">Alcastaro</a>.',
+  "en": 'Authorship: <a href="https://www.olds2030.org/">OLDS2030</a> · development and infographic by <a href="https://github.com/juanacasique">Juana Casique</a> and <a href="https://github.com/alcastaro">Alcastaro</a>.',
+  "fr": 'Auteurs : <a href="https://www.olds2030.org/">OLDS2030</a> · développement et infographie par <a href="https://github.com/juanacasique">Juana Casique</a> et <a href="https://github.com/alcastaro">Alcastaro</a>.'},
 }
 
 

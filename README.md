@@ -66,8 +66,8 @@ Proyecto apoyado por el **[Observatorio Latinoamericano de Desarrollo Sostenible
 
 - **[Juana Casique](https://github.com/juanacasique)** — análisis, pipeline de la API e infografía
   · [jcasique@kognis.org](mailto:jcasique@kognis.org)
-- **[Alberto Castillo Aroca](https://github.com/alcastaro)** — trabajo original de deduplicación
-  e inferencia del que se bifurca este proyecto.
+- **[Alcastaro](https://github.com/alcastaro)** — repositorio de deduplicación e inferencia
+  del que se bifurca este proyecto.
 
 Contacto de prensa: [jcasique@kognis.org](mailto:jcasique@kognis.org).
 

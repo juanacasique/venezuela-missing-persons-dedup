@@ -198,9 +198,9 @@ S = {
   "en": '<b>Responsible use:</b> contains sensitive personal data of vulnerable people. Use only to support locating them; do not redistribute contacts beyond that purpose.',
   "fr": '<b>Usage responsable :</b> contient des données personnelles sensibles de personnes vulnérables. À utiliser uniquement pour aider à les localiser ; ne pas rediffuser les contacts.'},
  "authors": {
-  "es": 'Infografía y análisis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurcado del trabajo original de <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
-  "en": 'Infographic and analysis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Forked from the original work by <a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.',
-  "fr": 'Infographie et analyse : <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurqué du travail original d’<a href="https://github.com/alcastaro">Alberto Castillo Aroca</a>.'},
+  "es": 'Infografía y análisis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurcado del repositorio de <a href="https://github.com/alcastaro">Alcastaro</a>.',
+  "en": 'Infographic and analysis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Forked from the repo by <a href="https://github.com/alcastaro">Alcastaro</a>.',
+  "fr": 'Infographie et analyse : <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurqué du repo original d’<a href="https://github.com/alcastaro">Alcastaro</a>.'},
 
  # --- Panorama / análisis (para periodistas, arriba, estilo humanitario) ---
  "analysis_h2": {"es": "El panorama", "en": "The situation", "fr": "La situation"},
@@ -720,7 +720,7 @@ TEMPLATE = r"""<!doctype html>
   .cbars{display:flex; flex-direction:column; gap:12px; max-width:640px;}
   .cbar{display:grid; grid-template-columns:7rem 1fr 3.2rem; align-items:center; gap:12px; font-size:.92rem;}
   .cbar-l{color:var(--ink); font-weight:600;}
-  .cbar-track{height:16px; background:var(--line-soft); border-radius:8px; overflow:hidden;}
+  .cbar-track{height:16px; background:var(--line); border-radius:8px; overflow:hidden;}
   .cbar-fill{display:block; height:100%; width:var(--w); border-radius:8px;
     background:linear-gradient(90deg,var(--blue),var(--blue-deep)); transform-origin:left;
     animation:grow .9s cubic-bezier(.22,.61,.36,1) both;}
@@ -741,7 +741,7 @@ TEMPLATE = r"""<!doctype html>
   .bars{display:flex; flex-direction:column; gap:11px;}
   .bar{display:grid; grid-template-columns:9rem 1fr auto; align-items:center; gap:12px; font-size:.92rem;}
   .bar .name{color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .track{height:14px; background:var(--line-soft); border-radius:7px; overflow:hidden;}
+  .track{height:14px; background:var(--line); border-radius:7px; overflow:hidden;}
   .fill{height:100%; width:var(--w); border-radius:7px; background:var(--blue);
         transform-origin:left; animation:grow .9s cubic-bezier(.22,.61,.36,1) both;}
   .bar .val{font-weight:700; color:var(--ink); white-space:nowrap;}
@@ -810,16 +810,18 @@ TEMPLATE = r"""<!doctype html>
     .bandwrap{flex-direction:column; gap:14px;}
     .langlbl{display:none;} .langbar-in{justify-content:center;}
     .pyr-head, .pyr-row{grid-template-columns:1fr 4.4rem 1fr;}
-    .pyr-side .v small{display:none;}
+    .pyr-side .v small{font-size:.85em;}
   }
   @media(max-width:430px){
     .cifras{grid-template-columns:1fr;}
     .bar{grid-template-columns:5.6rem 1fr auto; font-size:.86rem; gap:8px;}
-    .bar .val small{display:none;}
+    .bar .val{display:flex; flex-direction:column; align-items:flex-end; line-height:1.15;}
+    .bar .val small{margin-left:0; font-size:.78em;}
     .trend-chips{flex-direction:column; align-items:flex-start;}
     .donut{width:132px; height:132px;}
     .pyr-head, .pyr-row{grid-template-columns:1fr 3.6rem 1fr;}
     .pyr-side .v{font-size:.72rem;}
+    .pyr-side .v small{font-size:.8em;}
     .credit{padding:14px 16px;}
   }
 </style>

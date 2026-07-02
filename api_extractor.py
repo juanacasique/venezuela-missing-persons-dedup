@@ -123,7 +123,7 @@ def main():
         sys.stdout.flush()
     print()
 
-    with open(out, "w", newline="", encoding="utf-8") as f:
+    with open(out, "w", newline="", encoding="utf-8", errors="replace") as f:
         w = csv.DictWriter(f, fieldnames=campos)
         w.writeheader()
         w.writerows(rows)
