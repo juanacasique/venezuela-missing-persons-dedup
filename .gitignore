@@ -28,6 +28,9 @@ casos_prueba.json
 scraper.py
 docs/REPORTE.md
 
+# ─── Notas de prensa: se redactan aquí pero NO se versionan ─────────────────
+docs/nota_prensa_*.md
+
 # ─── Memoria/instrucciones privadas de Claude — NUNCA commitear ─────────────
 CLAUDE.md
 .claude/
