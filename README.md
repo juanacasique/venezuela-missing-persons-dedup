@@ -8,7 +8,7 @@ quiénes aparecieron, su sexo y su edad— y las publica en una **infografía tr
 
 ## 📊 La infografía
 
-**[Ver la infografía →](https://htmlpreview.github.io/?https://github.com/juanacasique/venezuela-missing-persons-dedup/blob/main/docs/infografia_2026-07-01.html)**
+**[Ver la infografía →](https://htmlpreview.github.io/?https://github.com/juanacasique/venezuela-missing-persons-dedup/blob/main/docs/infografia_2026-07-06.html)**
 
 Contiene: panorama general, cifras clave, qué implican los datos, tendencia entre cortes,
 composición por sexo y edad, **tres pirámides poblacionales** (aún buscadas · encontradas o a
