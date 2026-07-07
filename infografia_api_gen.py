@@ -19,6 +19,7 @@ Uso:     python3 infografia_api_gen.py
 
 import base64
 import json
+import argparse
 import re
 import unicodedata
 from datetime import datetime, timezone, timedelta
@@ -31,6 +32,7 @@ LOGO = "assets/olds_logo.png"
 OUTDIR = "docs"   # nombre del archivo: infografia_<AAAA-MM-DD>.html (fecha de generación)
 SNAPSHOTS = "docs/api_snapshots.json"  # cifras agregadas por fecha (sin PII) — base de la tendencia
 LANGS = ["es", "en", "fr"]
+ARGS = argparse.Namespace(date=None)  # sobrescrito por CLI en __main__
 
 CIUDADES = ["catia la mar", "la guaira", "caraballeda", "naiguata", "tanaguarena",
             "carayaca", "maiquetia", "macuto", "caracas", "carmen de uria",
@@ -131,6 +133,23 @@ S = {
   "es": "Inferido por persona (reportado → nombre → descripción). Cobertura {cov}; inferencia validada en 98,7%.",
   "en": "Inferred per person (reported → name → description). Coverage {cov}; inference validated at 98.7%.",
   "fr": "Déduit par personne (déclaré → nom → description). Couverture {cov} ; inférence validée à 98,7%."},
+ "kf_fem_lbl": {"es": "<b>mujeres</b><br>de quienes tienen sexo conocido",
+                "en": "<b>women</b><br>of those with known sex",
+                "fr": "<b>femmes</b><br>parmi celles au sexe connu"},
+ "kf_masc_lbl": {"es": "<b>hombres</b><br>de quienes tienen sexo conocido",
+                 "en": "<b>men</b><br>of those with known sex",
+                 "fr": "<b>hommes</b><br>parmi ceux au sexe connu"},
+ "kf_desc_lbl": {"es": "<b>sin sexo conocido</b><br>quedan fuera de esa proporción",
+                 "en": "<b>with unknown sex</b><br>excluded from that proportion",
+                 "fr": "<b>au sexe inconnu</b><br>exclus de cette proportion"},
+ "sexo_kf_note": {
+  "es": "Si asumimos que los <b>{descn}</b> casos sin sexo se reparten igual que los conocidos, la proporción estimada es <b>{fem} mujeres</b> y <b>{masc} hombres</b>. Las barras de arriba, en cambio, se calculan sobre el total (por eso incluyen la franja de desconocidos).",
+  "en": "If we assume the <b>{descn}</b> cases with unknown sex split like the known ones, the estimated proportion is <b>{fem} women</b> and <b>{masc} men</b>. The bars above, by contrast, are computed over the total (so they include the unknown share).",
+  "fr": "Si l’on suppose que les <b>{descn}</b> cas au sexe inconnu se répartissent comme les cas connus, la proportion estimée est de <b>{fem} femmes</b> et <b>{masc} hommes</b>. Les barres ci-dessus, elles, sont calculées sur le total (elles incluent donc la part d’inconnus)."},
+ "edad_kf": {
+  "es": "<b>Sobre quienes tienen edad conocida</b> (asumiendo igual reparto de los {ndn} sin dato): 0–4 <b>{a04}</b> · 5–17 <b>{a517}</b> · 18–59 <b>{a1859}</b> · 60+ <b>{a60}</b>. Sin edad conocida: <b>{nd}</b> del total.",
+  "en": "<b>Among those with known age</b> (assuming the {ndn} without data split alike): 0–4 <b>{a04}</b> · 5–17 <b>{a517}</b> · 18–59 <b>{a1859}</b> · 60+ <b>{a60}</b>. Age unknown: <b>{nd}</b> of the total.",
+  "fr": "<b>Parmi les personnes à l’âge connu</b> (en supposant que les {ndn} sans donnée se répartissent pareil) : 0–4 <b>{a04}</b> · 5–17 <b>{a517}</b> · 18–59 <b>{a1859}</b> · 60+ <b>{a60}</b>. Âge inconnu : <b>{nd}</b> du total."},
  "male": {"es": "Masculino", "en": "Male", "fr": "Homme"},
  "female": {"es": "Femenino", "en": "Female", "fr": "Femme"},
  "unknown": {"es": "Desconocido", "en": "Unknown", "fr": "Inconnu"},
@@ -150,9 +169,19 @@ S = {
                   "en": "Population pyramids by sex and age",
                   "fr": "Pyramides des âges par sexe"},
  "pyr_intro_sub": {
-  "es": "Rangos de edad estándar de respuesta humanitaria. Cada pirámide cuenta a TODAS las personas: la fila inferior agrupa a quienes <b>no tienen edad conocida</b>, y la <b>franja gris central</b> en cada fila representa personas <b>sin dato de sexo</b> (escala propia, no compara con las barras laterales). La incertidumbre se muestra, no se oculta.",
-  "en": "Standard humanitarian age ranges. Each pyramid counts ALL people: the bottom row groups those with <b>no known age</b>, and the <b>central grey stripe</b> in each row represents people with <b>unknown sex</b> (own scale, not comparable to the side bars). Uncertainty is shown, not hidden.",
-  "fr": "Tranches d’âge standard de la réponse humanitaire. Chaque pyramide compte TOUTES les personnes : la rangée du bas regroupe celles <b>sans âge connu</b>, et la <b>bande grise centrale</b> de chaque ligne représente les personnes <b>sans sexe connu</b> (échelle propre, non comparable aux barres latérales). L’incertitude est montrée, pas masquée."},
+  "es": "Rangos de edad estándar de respuesta humanitaria. Por defecto los porcentajes se calculan <b>solo sobre las personas con sexo y edad conocidos</b>; con el botón puedes <b>incluir a todos</b>. La fila inferior agrupa a quienes <b>no tienen edad conocida</b> y la <b>franja gris central</b> a quienes <b>no tienen sexo</b> (escala propia). Esos casos se atenúan en la vista «solo conocidos», pero nunca se ocultan.",
+  "en": "Standard humanitarian age ranges. By default the percentages are computed <b>only over people with known sex and age</b>; use the button to <b>include everyone</b>. The bottom row groups those with <b>no known age</b> and the <b>central grey stripe</b> those with <b>unknown sex</b> (own scale). Those cases are dimmed in the ‘known only’ view, but never hidden.",
+  "fr": "Tranches d’âge standard de la réponse humanitaire. Par défaut, les pourcentages sont calculés <b>uniquement sur les personnes dont le sexe et l’âge sont connus</b> ; le bouton permet d’<b>inclure tout le monde</b>. La rangée du bas regroupe celles <b>sans âge connu</b> et la <b>bande grise centrale</b> celles <b>sans sexe connu</b> (échelle propre). Ces cas sont atténués dans la vue « connus seulement », mais jamais masqués."},
+ "pyr_tg_known": {"es": "Solo con sexo y edad conocidos", "en": "Only with known sex & age", "fr": "Seulement sexe et âge connus"},
+ "pyr_tg_all": {"es": "Incluir a todos", "en": "Include everyone", "fr": "Inclure tout le monde"},
+ "pyr_tg_note": {
+  "es": "Cambia la base de los porcentajes. <b>Solo con sexo y edad conocidos</b> calcula sobre las personas ya identificadas; <b>Incluir a todos</b> reparte sobre el total, mostrando en gris a quienes aún faltan por identificar.",
+  "en": "Switches the base of the percentages. <b>Only with known sex & age</b> computes over already-identified people; <b>Include everyone</b> spreads over the total, showing in grey those still to be identified.",
+  "fr": "Change la base des pourcentages. <b>Seulement sexe et âge connus</b> calcule sur les personnes déjà identifiées ; <b>Inclure tout le monde</b> répartit sur le total, en grisant celles qui restent à identifier."},
+ "why_unknown": {
+  "es": "<b>¿Por qué no conocemos el sexo de todas?</b> Sí se infiere del nombre —así la cobertura llega al 87%— combinando un diccionario de nombres de pila, la terminación -a/-o y pistas de la descripción. Aun así, cerca del 13% queda sin resolver porque el nombre no da una señal fiable: nombres muy singulares o inventados, unisex, extranjeros, registros con solo el apellido o iniciales, y entradas con errores o spam. Antes que asignar un sexo probablemente equivocado, se deja <b>sin dato</b>. Con la edad pasa algo parecido: solo se usa cuando la persona la reportó o la describe con claridad.",
+  "en": "<b>Why don’t we know everyone’s sex?</b> It <em>is</em> inferred from the name —that is how coverage reaches 87%— combining a dictionary of given names, the -a/-o ending and clues in the description. Even so, about 13% stays unresolved because the name gives no reliable signal: highly unusual or invented names, unisex, foreign, records with only a surname or initials, and entries with errors or spam. Rather than assign a probably-wrong sex, it is left <b>unknown</b>. Age is similar: used only when the person reported it or clearly describes it.",
+  "fr": "<b>Pourquoi ne connaît-on pas le sexe de tous ?</b> Il <em>est</em> déduit du nom —c’est ainsi que la couverture atteint 87%— en combinant un dictionnaire de prénoms, la terminaison -a/-o et des indices de la description. Malgré tout, environ 13% reste non résolu car le nom ne donne pas de signal fiable : prénoms très singuliers ou inventés, unisexes, étrangers, enregistrements avec seulement le nom de famille ou des initiales, et entrées erronées ou spam. Plutôt que d’attribuer un sexe probablement erroné, on le laisse <b>inconnu</b>. Pour l’âge, c’est similaire : utilisé seulement s’il est déclaré ou clairement décrit."},
  "pyr_busc_h": {"es": "Aún buscadas", "en": "Still missing", "fr": "Toujours recherchées"},
  "pyr_busc_s": {"es": "Las {n} personas todavía reportadas como desaparecidas.",
                 "en": "The {n} people still reported as missing.",
@@ -171,6 +200,10 @@ S = {
   "es": "Población: <b>{tot}</b>. Hombres {m} ({mp}) · Mujeres {f} ({fp}) · sexo sin dato {u} ({up}).",
   "en": "Population: <b>{tot}</b>. Male {m} ({mp}) · Female {f} ({fp}) · sex unknown {u} ({up}).",
   "fr": "Population : <b>{tot}</b>. Hommes {m} ({mp}) · Femmes {f} ({fp}) · sexe inconnu {u} ({up})."},
+ "pyr_note_known": {
+  "es": "Base: <b>{known}</b> personas con sexo y edad conocidos ({knownp} de {tot}); los porcentajes de arriba se calculan sobre esa base. Las <b>{rest}</b> restantes, sin sexo o sin edad, quedan fuera de este cálculo y se muestran atenuadas.",
+  "en": "Base: <b>{known}</b> people with known sex and age ({knownp} of {tot}); the percentages above are computed over that base. The remaining <b>{rest}</b>, without sex or age, are left out of this calculation and shown dimmed.",
+  "fr": "Base : <b>{known}</b> personnes au sexe et à l’âge connus ({knownp} sur {tot}) ; les pourcentages ci-dessus sont calculés sur cette base. Les <b>{rest}</b> restantes, sans sexe ou sans âge, sont exclues de ce calcul et affichées en atténué."},
  "ubic_h2": {"es": "Dónde están reportadas", "en": "Where they are reported", "fr": "Où elles sont signalées"},
  "ubic_sub": {
   "es": "Personas del registro por localidad. El terremoto golpeó la franja costera del estado La Guaira.",
@@ -201,6 +234,10 @@ S = {
   "es": 'Infografía y análisis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurcado del repositorio de <a href="https://github.com/alcastaro">Alcastaro</a>.',
   "en": 'Infographic and analysis: <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Forked from the repo by <a href="https://github.com/alcastaro">Alcastaro</a>.',
   "fr": 'Infographie et analyse : <b><a href="https://github.com/juanacasique">Juana Casique</a></b>. Bifurqué du repo original d’<a href="https://github.com/alcastaro">Alcastaro</a>.'},
+ "bio": {
+  "es": '<b>Sobre la autora:</b> <b>Juana Casique Casique</b> es trabajadora humanitaria, experta en atención humanitaria, fortalecimiento de capacidades e inteligencia artificial. Desde <b>Kognis.org</b> pone estas herramientas al servicio de la respuesta ciudadana, convencida de que —ante la carencia de cifras oficiales— dar claridad sobre la magnitud del desastre y las necesidades de la población es también un acto de dignidad.',
+  "en": '<b>About the author:</b> <b>Juana Casique Casique</b> is a humanitarian worker specializing in humanitarian assistance, capacity building and artificial intelligence. Through <b>Kognis.org</b> she puts these tools at the service of the citizen-led response, convinced that —in the absence of official figures— bringing clarity to the scale of the disaster and the needs of the population is also an act of dignity.',
+  "fr": '<b>À propos de l’autrice :</b> <b>Juana Casique Casique</b> est une travailleuse humanitaire spécialisée dans l’aide humanitaire, le renforcement des capacités et l’intelligence artificielle. Depuis <b>Kognis.org</b>, elle met ces outils au service de la réponse citoyenne, convaincue que —en l’absence de chiffres officiels— apporter de la clarté sur l’ampleur de la catastrophe et les besoins de la population est aussi un acte de dignité.'},
 
  # --- Panorama / análisis (para periodistas, arriba, estilo humanitario) ---
  "analysis_h2": {"es": "El panorama", "en": "The situation", "fr": "La situation"},
@@ -334,8 +371,13 @@ def pop_stats(df):
     M = int((df["sexo_inferido"] == "Masculino").sum())
     F = int((df["sexo_inferido"] == "Femenino").sum())
     U = N - M - F
+    # base "solo conocidos": personas con sexo (M/F) Y edad conocidos = M+F en las 4 bandas OCHA
+    # (excluye la franja gris de sexo desconocido y la fila «Sin dato» de edad desconocida)
+    Nknown = sum(m + f for _, m, f, u in bands)
+    nage = sum(sd)  # personas sin edad conocida (fila inferior)
     maxcell = max([max(b[1], b[2]) for b in bands] + [max(sd[0], sd[1]), 1])
-    return {"bands": bands, "sd": sd, "N": N, "M": M, "F": F, "U": U, "maxcell": maxcell}
+    return {"bands": bands, "sd": sd, "N": N, "M": M, "F": F, "U": U,
+            "Nknown": Nknown, "nage": nage, "maxcell": maxcell}
 
 
 def main():
@@ -355,6 +397,12 @@ def main():
     DESC, OTRO = sx.get("Desconocido", 0), sx.get("Otro", 0)
     cov_sexo = 100 * (F + M + OTRO) / N
     maxsx = max(F, M, DESC, OTRO, 1)
+    # proporción hombre/mujer "como si fuera 100%": base = solo con sexo conocido (M+F).
+    # equivale a asumir que los sin-dato se reparten igual que los conocidos.
+    sex_known = F + M
+    fem_norm = 100 * F / sex_known if sex_known else 0
+    masc_norm = 100 * M / sex_known if sex_known else 0
+    desc_pct = 100 * DESC / N
 
     # edad OCHA (registro)
     ge = p["grupo_edad"].replace("", "Sin dato")
@@ -362,6 +410,10 @@ def main():
     e = {k: ec.get(k, 0) for k in OCHA + ["Sin dato"]}
     maxe = max(e.values())
     edad_cov = 100 * (N - e["Sin dato"]) / N
+    # distribución por edad normalizada sobre quienes tienen edad conocida
+    age_known = N - e["Sin dato"]
+    age_norm = {k: (100 * e[k] / age_known if age_known else 0) for k in OCHA}
+    age_nd_pct = 100 * e["Sin dato"] / N
 
     # pirámides
     POPS = [("busc", pop_stats(busca_df)), ("enc", pop_stats(enc_df)), ("hosp", pop_stats(ing))]
@@ -402,6 +454,9 @@ def main():
 
     logo = "data:image/png;base64," + base64.b64encode(open(LOGO, "rb").read()).decode()
     now = datetime.now(timezone(timedelta(hours=-4)))
+    if ARGS.date:  # forzar fecha de salida (archivo, timestamp y snapshot) — datos = corte en disco
+        y, m, d = map(int, ARGS.date.split("-"))
+        now = now.replace(year=y, month=m, day=d)
     hm = now.strftime("%H:%M")
     OUT = f"{OUTDIR}/infografia_{now.strftime('%Y-%m-%d')}.html"
     TS = {"es": f"{now.day} de {MES_ES[now.month-1]} de {now.year}, {hm} (hora de Venezuela, UTC−4)",
@@ -433,34 +488,50 @@ def main():
         return (f'<div class="leg"><span class="dot" style="background:{color}"></span>'
                 f'<div><div class="v">{n} <small>· {pc}</small></div><div class="t">{t}</div></div></div>')
 
-    def pyr_row(label, m, f, u, Npop, maxcell, max_u, lang, nodata=False):
+    def pyr_row(label, m, f, u, Npop, Nknown, maxcell, max_u, lang, nodata=False):
         wm, wf = 100*m/maxcell, 100*f/maxcell
         wuc = 100*u/max_u if max_u > 0 else 0
         cls = "pyr-row nodata" if nodata else "pyr-row"
         stripe = f'<span class="u-stripe" style="--wuc:{wuc:.1f}%"></span>' if u > 0 else ''
+
+        def pcts(cnt):
+            # dos porcentajes: sobre el total (full) y sobre la base conocida (known).
+            # la fila «Sin dato» (nodata) no forma parte de la base conocida → "—".
+            full = fmt_pct(100*cnt/Npop, lang) if Npop else "0"
+            known = "—" if (nodata or not Nknown) else fmt_pct(100*cnt/Nknown, lang)
+            return (f'<small class="pct pct-full">{full}</small>'
+                    f'<small class="pct pct-known">{known}</small>')
+
         return (f'<div class="{cls}">'
                 f'<div class="pyr-side left">'
-                f'<span class="v">{fmt_int(m,lang)}<small>{fmt_pct(100*m/Npop,lang)}</small></span>'
+                f'<span class="v">{fmt_int(m,lang)}{pcts(m)}</span>'
                 f'<span class="bar m" style="--w:{wm:.1f}%"></span></div>'
                 f'<div class="pyr-label">{stripe}{label}</div>'
                 f'<div class="pyr-side right">'
                 f'<span class="bar f" style="--w:{wf:.1f}%"></span>'
-                f'<span class="v">{fmt_int(f,lang)}<small>{fmt_pct(100*f/Npop,lang)}</small></span></div></div>')
+                f'<span class="v">{fmt_int(f,lang)}{pcts(f)}</span></div></div>')
 
     def pyramid_block(key, st, lang, L):
         head = (f'<div class="pyr-head"><span class="l">◀ {L("male")}</span><span></span>'
                 f'<span class="r">{L("female")} ▶</span></div>')
         max_u = max((u for _, _, _, u in st["bands"]), default=0)
         max_u = max(max_u, st["sd"][2])
-        rows = "".join(pyr_row(BAND_LBL[b], m, f, u, st["N"], st["maxcell"], max_u, lang)
+        Nk = st["Nknown"]
+        rows = "".join(pyr_row(BAND_LBL[b], m, f, u, st["N"], Nk, st["maxcell"], max_u, lang)
                        for b, m, f, u in st["bands"])
         sdm, sdf, sdu = st["sd"]
-        rows += pyr_row(L("pyr_nd"), sdm, sdf, sdu, st["N"], st["maxcell"], max_u, lang, nodata=True)
-        note = L("pyr_note").format(
+        rows += pyr_row(L("pyr_nd"), sdm, sdf, sdu, st["N"], Nk, st["maxcell"], max_u, lang, nodata=True)
+        note_all = L("pyr_note").format(
             tot=fmt_int(st["N"], lang),
             m=fmt_int(st["M"], lang), mp=fmt_pct(100*st["M"]/st["N"], lang),
             f=fmt_int(st["F"], lang), fp=fmt_pct(100*st["F"]/st["N"], lang),
             u=fmt_int(st["U"], lang), up=fmt_pct(100*st["U"]/st["N"], lang))
+        note_known = L("pyr_note_known").format(
+            tot=fmt_int(st["N"], lang), known=fmt_int(Nk, lang),
+            knownp=fmt_pct(100*Nk/st["N"], lang) if st["N"] else "0",
+            rest=fmt_int(st["N"] - Nk, lang))
+        note = (f'<p class="pyr-note note-known">{note_known}</p>'
+                f'<p class="pyr-note note-all">{note_all}</p>')
         legend = (
             f'<span class="leg"><span class="dot" style="background:var(--blue-deep)"></span>{L("male")}</span>'
             f'<span class="leg"><span class="dot" style="background:var(--amber)"></span>{L("female")}</span>'
@@ -470,7 +541,7 @@ def main():
         return (f'<section class="pyrsec"><h3 class="pyr-title">{title}</h3>'
                 f'<p class="sub">{sub}</p>'
                 f'<div class="pyr">{head}{rows}</div>'
-                f'<p class="pyr-note">{note}</p>'
+                f'{note}'
                 f'<div class="pyr-legend">{legend}</div></section>')
 
     def build(lang):
@@ -478,7 +549,8 @@ def main():
         d = {}
         for k in ["lang_label", "eyebrow", "h1", "stand", "estado_h2", "estado_sub",
                   "sexo_h2", "edad_h2", "method", "credit", "repo", "method_foot",
-                  "use", "authors", "ubic_h2", "ubic_sub", "pyr_intro_h2", "pyr_intro_sub",
+                  "use", "authors", "bio", "ubic_h2", "ubic_sub", "pyr_intro_h2", "pyr_intro_sub",
+                  "pyr_tg_known", "pyr_tg_all", "pyr_tg_note", "why_unknown",
                   "cifras_h2", "cifras_sub", "implic_h2", "implic_sub",
                   "conf_lbl", "conf_val", "conf_note",
                   "trend_h2", "trend_sub", "compl_h2", "compl_sub",
@@ -506,6 +578,14 @@ def main():
             bar(L("male"), M, N, 100*M/maxsx, lang, "var(--blue-deep)"),
             bar(L("unknown"), DESC, N, 100*DESC/maxsx, lang, "var(--slate)"),
             bar(L("other"), OTRO, N, 100*OTRO/maxsx, lang, "var(--blue-soft)")])
+        # key figures: proporción M/F "como si fuera 100%" (base = sexo conocido) + nota de desconocidos
+        kf = lambda n, l, cls="": f'<div class="cc{cls}"><div class="cc-n">{n}</div><div class="cc-t">{l}</div></div>'
+        d["sexo_kf"] = "".join([
+            kf(fmt_pct(fem_norm, lang), L("kf_fem_lbl")),
+            kf(fmt_pct(masc_norm, lang), L("kf_masc_lbl")),
+            kf(fmt_pct(desc_pct, lang), L("kf_desc_lbl"), cls=" cc-muted")])
+        d["sexo_kf_note"] = L("sexo_kf_note").format(
+            descn=fmt_int(DESC, lang), fem=fmt_pct(fem_norm, lang), masc=fmt_pct(masc_norm, lang))
         d["edad_sub"] = L("edad_sub").format(cov=fmt_pcti(edad_cov, lang))
         d["edad_bars"] = "".join([
             bar(L("age_04"), e["0-4"], N, 100*e["0-4"]/maxe, lang, "var(--blue-soft)"),
@@ -513,6 +593,11 @@ def main():
             bar(L("age_1859"), e["18-59"], N, 100*e["18-59"]/maxe, lang, "var(--blue)"),
             bar(L("age_60"), e["60+"], N, 100*e["60+"]/maxe, lang, "var(--blue-deep)"),
             bar(L("age_nd"), e["Sin dato"], N, 100*e["Sin dato"]/maxe, lang, "var(--slate)")])
+        d["edad_kf"] = L("edad_kf").format(
+            ndn=fmt_int(e["Sin dato"], lang),
+            a04=fmt_pct(age_norm["0-4"], lang), a517=fmt_pct(age_norm["5-17"], lang),
+            a1859=fmt_pct(age_norm["18-59"], lang), a60=fmt_pct(age_norm["60+"], lang),
+            nd=fmt_pct(age_nd_pct, lang))
         d["pyramids"] = "".join(pyramid_block(key, st, lang, L) for key, st in POPS)
         d["city_bars"] = ("".join(bar(k, v, N, 100*v/maxc, lang, "var(--blue)") for k, v in nombradas)
                           + bar(L("otras"), otras, N, 100*otras/maxc, lang, "var(--slate)", muted=True))
@@ -697,6 +782,10 @@ TEMPLATE = r"""<!doctype html>
   .cc-n{font-size:clamp(1.9rem,4vw,2.6rem); font-weight:800; line-height:1; letter-spacing:-.01em;}
   .cc-t{margin-top:9px; font-size:.86rem; line-height:1.35; color:#dbe9f5;}
   .cc-t b{color:#fff; font-weight:700;}
+  /* key figures normalizadas (proporción M/F sobre base conocida) */
+  .kf{grid-template-columns:repeat(3,1fr); margin-top:14px; max-width:760px;}
+  .cc-muted{background:linear-gradient(150deg,#5b6f82,var(--slate));}
+  .kf-note{margin-top:10px; max-width:80ch;}
 
   /* Qué implican estos datos */
   .implic-sec{margin-top:clamp(24px,3.5vw,34px);}
@@ -786,6 +875,30 @@ TEMPLATE = r"""<!doctype html>
   .pyr-legend{display:flex; gap:20px; flex-wrap:wrap; margin-top:10px; font-size:.86rem; color:var(--ink-soft);}
   .pyr-legend .leg{display:flex; gap:8px; align-items:center;}
   .pyr-legend .dot{width:11px; height:11px; border-radius:3px;}
+  /* --- toggle base de porcentajes (solo conocidos / incluir a todos) --- */
+  .pyr-toggle{display:inline-flex; flex-wrap:wrap; gap:4px; background:var(--line-soft);
+    border:1px solid var(--line); border-radius:999px; padding:4px; margin:6px 0 6px;}
+  .pyrbtn{appearance:none; border:0; background:transparent; color:var(--ink-soft); font:inherit;
+    font-weight:600; font-size:.86rem; padding:7px 15px; border-radius:999px; cursor:pointer;
+    transition:background .15s,color .15s;}
+  .pyrbtn[aria-pressed="true"]{background:var(--blue-deep); color:#fff;}
+  .pyrbtn:hover{color:var(--ink);} .pyrbtn[aria-pressed="true"]:hover{color:#fff;}
+  .pyrbtn:focus-visible{outline:2px solid var(--blue); outline-offset:2px;}
+  .pyr-tg-note{margin:2px 0 4px; max-width:74ch;}
+  .why-unknown{margin-top:16px; max-width:80ch; border-top:1px dashed var(--line); padding-top:12px;}
+  /* dos porcentajes por celda: por defecto se ve la base "solo conocidos" */
+  .pct-full{display:none;}
+  #pyr-section.mode-all .pct-full{display:inline;}
+  #pyr-section.mode-all .pct-known{display:none;}
+  /* notas conmutables: por defecto note-known */
+  .note-all{display:none;}
+  #pyr-section.mode-all .note-all{display:block;}
+  #pyr-section.mode-all .note-known{display:none;}
+  /* atenuar lo excluido (sexo/edad desconocidos) en la vista "solo conocidos" */
+  .pyr-row.nodata{opacity:.4; transition:opacity .2s;}
+  #pyr-section.mode-all .pyr-row.nodata{opacity:1;}
+  .u-stripe{transition:opacity .2s;}
+  #pyr-section:not(.mode-all) .u-stripe{opacity:.3;}
   footer{margin-top:clamp(34px,5vw,52px); padding-top:24px; border-top:1px solid var(--line); text-align:center;}
   .credit{display:inline-flex; align-items:center; gap:12px; justify-content:center; flex-wrap:wrap;
     background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 22px; margin:0 auto 16px;
@@ -898,6 +1011,8 @@ TEMPLATE = r"""<!doctype html>
       <h2 data-i18n-html="sexo_h2">@@sexo_h2@@</h2>
       <p class="sub" data-i18n-html="sexo_sub">@@sexo_sub@@</p>
       <div class="bars" data-i18n-html="sexo_bars">@@sexo_bars@@</div>
+      <div class="cifras kf" data-i18n-html="sexo_kf">@@sexo_kf@@</div>
+      <p class="sub kf-note" data-i18n-html="sexo_kf_note">@@sexo_kf_note@@</p>
     </section>
   </div>
 
@@ -907,14 +1022,21 @@ TEMPLATE = r"""<!doctype html>
     <h2 data-i18n-html="edad_h2">@@edad_h2@@</h2>
     <p class="sub" data-i18n-html="edad_sub">@@edad_sub@@</p>
     <div class="bars" data-i18n-html="edad_bars">@@edad_bars@@</div>
+    <p class="sub kf-note" data-i18n-html="edad_kf">@@edad_kf@@</p>
   </section>
 
   <hr class="rule">
 
-  <section>
+  <section id="pyr-section">
     <h2 data-i18n-html="pyr_intro_h2">@@pyr_intro_h2@@</h2>
     <p class="sub" data-i18n-html="pyr_intro_sub">@@pyr_intro_sub@@</p>
+    <div class="pyr-toggle" role="group" aria-label="Base de los porcentajes">
+      <button type="button" class="pyrbtn" data-mode="known" aria-pressed="true" data-i18n-html="pyr_tg_known">@@pyr_tg_known@@</button>
+      <button type="button" class="pyrbtn" data-mode="all" aria-pressed="false" data-i18n-html="pyr_tg_all">@@pyr_tg_all@@</button>
+    </div>
+    <p class="sub pyr-tg-note" data-i18n-html="pyr_tg_note">@@pyr_tg_note@@</p>
     <div data-i18n-html="pyramids">@@pyramids@@</div>
+    <p class="pyr-note why-unknown" data-i18n-html="why_unknown">@@why_unknown@@</p>
   </section>
 
   <hr class="rule">
@@ -966,6 +1088,7 @@ TEMPLATE = r"""<!doctype html>
     <p data-i18n-html="repo">@@repo@@</p>
     <p data-i18n-html="method_foot">@@method_foot@@</p>
     <p data-i18n-html="use">@@use@@</p>
+    <p data-i18n-html="bio">@@bio@@</p>
     <div class="support-logo">
       <span class="olds-logo olds-logo--ft" role="img" aria-label="Observatorio Latinoamericano de Desarrollo Sostenible"></span>
     </div>
@@ -989,13 +1112,29 @@ TEMPLATE = r"""<!doctype html>
     });
     try{ localStorage.setItem("infografia_lang", lang); }catch(e){}
   }
+  function setMode(mode){
+    var sec = document.getElementById("pyr-section");
+    if(!sec) return;
+    var all = (mode === "all");
+    sec.classList.toggle("mode-all", all);
+    document.querySelectorAll(".pyrbtn").forEach(function(b){
+      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === mode ? "true" : "false");
+    });
+    try{ localStorage.setItem("infografia_pyr_mode", mode); }catch(e){}
+  }
   document.addEventListener("DOMContentLoaded", function(){
     document.querySelectorAll(".langbtn").forEach(function(b){
       b.addEventListener("click", function(){ apply(b.getAttribute("data-lang")); });
     });
+    document.querySelectorAll(".pyrbtn").forEach(function(b){
+      b.addEventListener("click", function(){ setMode(b.getAttribute("data-mode")); });
+    });
     var saved = null;
     try{ saved = localStorage.getItem("infografia_lang"); }catch(e){}
     apply(saved || "es");
+    var savedMode = null;
+    try{ savedMode = localStorage.getItem("infografia_pyr_mode"); }catch(e){}
+    setMode(savedMode === "all" ? "all" : "known");  // por defecto: solo conocidos
   });
 })();
 </script>
@@ -1003,4 +1142,9 @@ TEMPLATE = r"""<!doctype html>
 
 
 if __name__ == "__main__":
+    ap = argparse.ArgumentParser(description="Genera la infografía trilingüe desde los datos procesados de la API.")
+    ap.add_argument("--date", default=None,
+                    help="AAAA-MM-DD: fuerza la fecha del archivo/timestamp/snapshot (default: hoy). "
+                         "Los datos son siempre el corte en disco (data/processed).")
+    ARGS = ap.parse_args()
     main()
